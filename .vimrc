@@ -34,8 +34,10 @@ call plug#begin('~/.vim/plugged')
     \ 'for': ['javascript', 'javascript.jsx', 'typescript'],
     \ 'do': 'make install'
   \}
-  "v JS syntax highlight.
+  "v JS syntax highlight. Appears to provide better ES6 support than pangloss/vim-javascript.
   Plug 'jelera/vim-javascript-syntax'
+  "v
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 " [colorscheme]
@@ -48,6 +50,7 @@ if exists("+termguicolors")
 endif
 
 " [colorscheme -> gruvbox] Configurations. See https://github.com/morhetz/gruvbox/wiki/Configuration.
+" The below is diable since for now I want to use the purify theme.
 "let g:gruvbox_italic=1
 "let g:gruvbox_contrast_dark='hard'
 "v  Enable the color scheme. See https://github.com/morhetz/gruvbox/wiki/Installation.
@@ -74,6 +77,7 @@ highlight StatusLine cterm=reverse
 set hlsearch ignorecase smartcase
 
 " [ale] Apply the StandardJS style only
+" The below is disabled unless at some point I'd like to apply it globally.
 "let g:ale_linters = {
 "\   'javascript': ['standard'],
 "\}
