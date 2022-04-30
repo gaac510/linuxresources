@@ -17,27 +17,40 @@ autocmd once_per_source VimEnter *
     \| PlugInstall --sync | source $MYVIMRC
   \| endif
 
+" [plugin -> ale] configure for neoclide/coc.nvim compatibility. See https://github.com/dense-analysis/ale#5iii-how-can-i-use-ale-and-cocnvim-together
+let g:ale_disable_lsp = 1
+
+" [plugin -> vim-polyglot]
+" Disable javascript pack since I prefer [plugin -> vim-javascript-syntax]
+let g:polyglot_disabled = ['javascript']
+
 " [vim-plug] Register plugins. This auto automatically executes `filetype
 " plugin indent on` and `syntax enable`. These can be reverted after `plug#end`
 " call.  See https://github.com/junegunn/vim-plug#usage.
 call plug#begin('~/.vim/plugged')
-  "v A universal set of sensible vim defaults. See https://github.com/tpope/vim-sensible.
+  "v A universal set of sensible vim defaults.
   Plug 'tpope/vim-sensible'
-  "v ALE == Asynchronous Lint Engine. See https://github.com/dense-analysis/ale.
+  "v ALE == Asynchronous Lint Engine.
   Plug 'dense-analysis/ale'
-  "v gruvbox color scheme. See https://github.com/morhetz/gruvbox.
+  "v gruvbox color scheme.
   Plug 'morhetz/gruvbox'
-  "v purify color scheme. See https://github.com/kyoz/purify/tree/master/vim.
+  "v purify color scheme.
   Plug 'kyoz/purify', { 'rtp':'vim' }
+  "v onedark color scheme.
+  Plug 'joshdick/onedark.vim'
   "v Prepopulate JSDoc comments based on function signatures.
   Plug 'heavenshell/vim-jsdoc', { 
     \ 'for': ['javascript', 'javascript.jsx', 'typescript'],
     \ 'do': 'make install'
   \}
+  "v Collection of language packs (for syntax, linting etc.).
+  Plug 'sheerun/vim-polyglot'
   "v JS syntax highlight. Appears to provide better ES6 support than pangloss/vim-javascript.
   Plug 'jelera/vim-javascript-syntax'
-  "v
+  "v Conquer of Completion
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  "v Make scrolling smooth.
+  Plug 'psliwka/vim-smoothie'
 call plug#end()
 
 " [colorscheme]
@@ -48,16 +61,15 @@ if exists("+termguicolors")
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
+"v Set here a color scheme which does not require special settings. (An exception would be gruvbox.)
+colorscheme purify
 
 " [colorscheme -> gruvbox] Configurations. See https://github.com/morhetz/gruvbox/wiki/Configuration.
-" The below is diable since for now I want to use the purify theme.
+"v Diable since for now I want to use the purify theme.
 "let g:gruvbox_italic=1
 "let g:gruvbox_contrast_dark='hard'
-"v  Enable the color scheme. See https://github.com/morhetz/gruvbox/wiki/Installation.
+"v Enable the color scheme. See https://github.com/morhetz/gruvbox/wiki/Installation.
 "autocmd once_per_source VimEnter * ++nested colorscheme gruvbox
-
-" [colorscheme -> purify]
-colorscheme purify
 
 " [Indentation]
 set tabstop=2 softtabstop=2 shiftwidth=2 expandtab
@@ -76,9 +88,12 @@ highlight StatusLine cterm=reverse
 " [Search]
 set hlsearch ignorecase smartcase
 
-" [ale] Apply the StandardJS style only
-" The below is disabled unless at some point I'd like to apply it globally.
-"let g:ale_linters = {
+" [plugin -> ale] Customize linters and fixers.
+let g:ale_linters = {
 "\   'javascript': ['standard'],
-"\}
-"let g:ale_fixers = {'javascript': ['standard']}
+\   'python': ['flake8', 'pylint'],
+\}
+let g:ale_fixers = {
+"\ 'javascript': ['standard'],
+\   'python': ['yapf'],
+\}
